@@ -39,7 +39,7 @@ async function sendApodToChannel() {
   if (data.media_type === 'image') {
     await channel.send({ content: message, files: [data.url] });
   } else {
-    // Caso seja vídeo ou outro tipo, apenas envia o link
+    // In case of video, we can just send the message with the URL
     await channel.send(message);
   }
 }
@@ -47,13 +47,14 @@ async function sendApodToChannel() {
 client.once('ready', () => {
   console.log(`Bot online como ${client.user?.tag}`);
 
-  // Agendamento: todo dia às 10h da manhã (hora do servidor)
+  // Server time - Schedule
   cron.schedule('0 10 * * *', () => {
-    console.log('Enviando APOD...');
+    console.log('Seding APOD...');
     sendApodToChannel();
   });
 
-  // Opcional: enviar logo que o bot iniciar, para teste
+  // As soon as the bot is ready, send the APOD immediately
+  console.log('Sending APOD immediately...');
   sendApodToChannel();
 });
 

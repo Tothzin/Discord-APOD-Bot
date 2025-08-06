@@ -3,6 +3,7 @@ import axios from 'axios';
 import cron from 'node-cron';
 import dotenv from 'dotenv';
 dotenv.config();
+console.log(process.env.DISCORD_TOKEN, process.env.NASA_API_KEY, process.env.CHANNEL_ID);
 
 const DISCORD_TOKEN = process.env.DISCORD_TOKEN!;
 const NASA_API_KEY = process.env.NASA_API_KEY!;

@@ -29,20 +29,25 @@ async function sendApodToChannel() {
   const data = await fetchApod();
   if (!data) return;
 
-  const channel = client.channels.cache.get(CHANNEL_ID) as TextChannel;
+  const channel = client.channels.cache.get(CHANNEL_ID) as TextChannel | undefined;
   if (!channel) {
-    console.error('Canal não encontrado.');
+    console.error('Canal não encontrado e/ou bot sem acesso ao canal.');
     return;
   }
 
-  let message = `**${data.title}**\n${data.explanation}\n${data.url}`;
+  const message = `**${data.title}**\n${data.explanation}\n${data.url}`;
 
-  if (data.media_type === 'image') {
-    await channel.send({ content: message, files: [data.url] });
-  } else {
-    // In case of video, we can just send the message with the URL
-    await channel.send(message);
+  try {
+    if (data.media_type === 'image') {
+      await channel.send({ content: message, files: [data.url] });
+      console.log('Imagem enviada com sucesso!');
+    } else {
+    await channel.send({ content: message });
+    console.log('Vídeo enviado com sucesso!');
   }
+} catch (error) {
+    console.error('Erro ao enviar mensagem:', error);
+}
 }
 
 client.once('ready', () => {
